@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 const apiSchema = mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+      },
     Title:{
         type:String,
         required:true,
@@ -19,7 +23,11 @@ const apiSchema = mongoose.Schema({
         type:String,
         required:true,
         trim:true
-    }
-})
+    },
+},
+{ 
+    timestamps: true 
+}
+);
 const apinews = new mongoose.model("ShareSansar", apiSchema);
 module.exports = apinews;

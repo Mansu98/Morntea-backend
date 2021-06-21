@@ -7,8 +7,6 @@ const json2csv = require("json2csv").Parser;
 const news = "https://www.sharesansar.com/";
 var newsData =[];
 (async()=>{
-   
-
     const response = await request({
         uri:news,
         headers:{
@@ -33,16 +31,13 @@ var newsData =[];
     (async()=>{
         let detailData =[]; 
         let links=[]; 
-        console.log(newsData);
     
         newsData.map((item,i)=>{
             links.push(newsData[i].link);
             })
-            console.log(links);
+     
             for(let link of links)
-            {
-    
-            
+            {    
       const response = await request({
             uri:link, 
               headers:{
@@ -54,8 +49,8 @@ var newsData =[];
         });
         let $ = cheerio.load(response);
         let title= $("div > div > div.col-md-12 > h2").text().trim();
-        let date = $('div.col-md-12 > div.margin-bottom-10 > div.col-lg-8 > h5').text().replace(/\s\s+/g,"");
-        let img = $('div > div > div > div.col-md-12 > figure > img').attr('src').trim();
+        let date = $('div.col-md-12 > div.margin-bottom-10 > div.col-lg-8 > h5').text().trim();
+        let img = $('div > div > div > div.col-md-12 > figure > img').attr('src');
         let detail =$('#newsdetail-content').text().trim();
         
       

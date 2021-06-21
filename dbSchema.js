@@ -31,7 +31,7 @@ csvtojson().fromFile(fileName).then(source => {
          arrayToInsert.push(oneRow);
      }
      //inserting into the table “employees”
-     var collectionName = 'ShareSansar';
+     var collectionName = 'sharesansars';
      var collection = dbConn.collection(collectionName);
      collection.insertMany(arrayToInsert, (err, result) => {
          if (err) console.log(err);
@@ -40,3 +40,4 @@ csvtojson().fromFile(fileName).then(source => {
          }
      });
 });
+
