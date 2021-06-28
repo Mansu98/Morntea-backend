@@ -20,6 +20,13 @@ const UserSchema = new mongoose.Schema(
       required: true,
       min: 6,
     },
+    Image:{
+      type:String,
+      trim:true
+  },
+  cloudinary_id: {
+    type: String,
+  },
     isAdmin: {
       type: Boolean,
       default: false,
