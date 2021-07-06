@@ -4,6 +4,11 @@ const router = express.Router()
 const bcrypt = require("bcrypt");
 const cloudinary = require('cloudinary').v2;
 const upload = require("./multer");
+const redis = require("redis");
+
+
+const REDIS_PORT =  6379;
+const client = redis.createClient(REDIS_PORT);
 
 cloudinary.config({ 
   cloud_name: 'dhtobgfyw', 
@@ -122,27 +127,89 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-//get a user
-router.get("/:id", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    const { updatedAt, ...other } = user._doc;
-    res.status(200).json(other);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-// get all the users
-router.get("/",(req,res)=>{
 
-    User.find((err,data)=>{
+
+// get a user
+
+const getUser = async (req,res)=>{
+  const userId = req.params.id;
+  console.log("api " + userId);
+
+   if(!userId){
+          res.status(500).send(err)
+      }
+     else{
+  const aUser = await User.findById(userId);
+
+            //Set data to Redis
+            client.setex(userId,3600, JSON.stringify(aUser));
+            res.status(201).send(aUser);
+            console.log("Fetching from API")
+            console.log(aUser);
+          }
+      }
+
+
+//cache middleware 
+ function singleUser(req,res,next){
+  const userId = req.params.id;
+  console.log("cache " + userId);
+ client.get(userId,(err,redisData)=>{
+      if(err) {throw err}
+
+      else if(redisData){
+          console.log("fetching from cache");
+          res.send(JSON.parse(redisData))
+          console.log(redisData);
+
+      } else{
+          next()
+      }
+  })
+}
+
+ router.get("/:id", singleUser ,getUser)
+
+
+
+
+
+
+// get all the users
+
+const getUsers = async (req,res)=>{
+
+   await User.find((err,data)=>{
         if(err){
             res.status(500).send(err)
         }
-            else{
-                res.status(201).send(data)
+       else{
+              //Set data to Redis
+              client.setex("userData",60, JSON.stringify(data));
+              res.status(201).send(data);
+              console.log("Fetching from API")
+              console.log(data);
             }
         }
     )
-})
-module.exports = router;
+}
+
+
+//cache middleware 
+ function cache(req,res,next){
+client.get("userData",(err,redisData)=>{
+      if(err) {throw err}
+
+      else if(redisData){
+          console.log("fetching from cache");
+          res.send(JSON.parse(redisData))
+          console.log(redisData);
+
+      } else{
+          next()
+      }
+  })
+}
+router.get("/", cache, getUsers);
+
+  module.exports = router;
