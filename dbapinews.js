@@ -16,7 +16,6 @@ const apiSchema = mongoose.Schema({
     },
     Image:{
         type:String,
-       
         trim:true
     },
     Detail:{
