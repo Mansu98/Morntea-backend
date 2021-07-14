@@ -11,22 +11,20 @@ const REDIS_PORT =  6379;
 const client = redis.createClient(REDIS_PORT);
 
 
-
 //REGISTER NEW USER
 router.post("/register", asyncHandler( async (req, res) => {
   
       //create new user
-      const userExists = await User.findOne({email: req.body.user.email})
-
+      const userExists = await User.findOne({email: req.body.email})
+console.log(req.body.email);
       if (userExists){
-        res.status(400);
-        throw new Error("Email Id already exists!");
-      }
-
+        res.status(400);  
+      } 
+      else{
       const newUser = await User.create({
-        username: req.body.user.username,
-        email: req.body.user.email,
-        password: req.body.user.password,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
       });
       console.log(newUser)
        
@@ -44,6 +42,7 @@ router.post("/register", asyncHandler( async (req, res) => {
       throw new Error("Error Occured")
     }
       
+  }
   }) 
   );
   
@@ -61,6 +60,9 @@ router.post("/register", asyncHandler( async (req, res) => {
             // token:generateToken(authUser._id)
     
           });
+          res.render('dashboard',{
+            user: req.authuser
+            });
         }
         else{
           res.status(400);
@@ -69,6 +71,8 @@ router.post("/register", asyncHandler( async (req, res) => {
       })
   );
   
+
+
 
 //update user
 router.put("/:id", async (req, res) => {
