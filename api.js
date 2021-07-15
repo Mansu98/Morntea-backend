@@ -1,13 +1,21 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv =require("dotenv");
+// const { errorHandler, notFound } = require("./middleware/errorMiddleware.js");
 
-const userRoute = require("./routes/users");
-const postRoute = require("./routes/posts");
+const userRoute = require("./routes/userRoutes");
+const postRoute = require("./routes/postRoutes");
+
+dotenv.config();
 
 
-const app = express();
+const app = express(); // main thing
 app.use(cors());
+app.use(express.json()); // to accept json data
+// Error Handling middlewares
+// app.use(notFound);
+// app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 

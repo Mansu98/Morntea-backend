@@ -2,13 +2,13 @@ const User = require("../models/User");
 const express = require("express");
 const router = express.Router()
 const bcrypt = require("bcrypt");
-const redis = require("redis");
+// const redis = require("redis");
 const asyncHandler = require("express-async-handler");
 // const generateToken = require("../utils/generateToken");
 
 
-const REDIS_PORT =  6379;
-const client = redis.createClient(REDIS_PORT);
+// const REDIS_PORT =  6379;
+// const client = redis.createClient(REDIS_PORT);
 
 
 //REGISTER NEW USER

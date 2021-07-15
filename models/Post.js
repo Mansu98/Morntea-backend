@@ -5,12 +5,11 @@ const apiSchema = mongoose.Schema({
         required: true,
         ref: "User",
       },
-    Title:{
+    title:{
         type:String,
-  
         trim:true
     },
-    Date:{
+    date:{
         type:String,
         trim:true
     },
