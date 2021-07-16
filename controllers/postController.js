@@ -1,8 +1,8 @@
 const Post = require("../models/Post");
 const asyncHandler = require("express-async-handler");
 
-// @desc    Get logged in user nosts
-// @route   GET /api/nosts
+// @desc    Get logged in user posts
+// @route   GET /api/posts
 // @access  Private
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({ user: req.user._id });

@@ -2,6 +2,16 @@ const asyncHandler = require( "express-async-handler");
 const User = require( "../models/User");
 const generateToken = require( "../utils/generateToken.js");
 
+
+// @desc    Get users
+// @route   GET /api/users
+// @access  Private
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+});
+
+
 //@description     Auth the user
 //@route           POST /api/users/login
 //@access          Public
@@ -13,7 +23,7 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
-      usernname: user.username,
+      username: user.username,
       email: user.email,
       password:user.password,
       image:user.image,
@@ -48,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
         _id: user._id,
-      usernname: user.username,
+      username: user.username,
       email: user.email,
       password:user.password,
       image:user.image,
@@ -68,9 +78,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    user.username = req.body.name || user.username;
+    user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.image = req.body.image || user.image;
+  
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -78,7 +89,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     res.json({
       _id: updatedUser._id,
-      name: updatedUser.username,
+      username: updatedUser.username,
       email: updatedUser.email,
       password: updatedUser.password,
       image: updatedUser.image,
@@ -91,4 +102,4 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { authUser, updateUserProfile, registerUser };
+module.exports = { authUser, updateUserProfile, registerUser, getUsers };
