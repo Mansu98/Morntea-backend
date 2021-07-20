@@ -5,7 +5,7 @@ const {
   CreatePost,
   DeletePost,
   UpdatePost,
-} = require("../../controllers/PostController.js");
+} = require("../controllers/PostController.js");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware.js");
 
