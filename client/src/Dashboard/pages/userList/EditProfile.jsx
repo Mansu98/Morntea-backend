@@ -25,7 +25,7 @@ function EditProfile() {
   const { userInfo } = userLogin;
 
   const userUpdate = useSelector((state) => state.userUpdate);
-  const { loading, error, success } = userUpdate;
+  const { loading, success } = userUpdate;
 
   useEffect(() => {
     if (!userInfo) {
